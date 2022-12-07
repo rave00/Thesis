@@ -1,3 +1,4 @@
+import 'package:diabeat_app_1/screen/screen_preD.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +7,6 @@ import 'package:diabeat_app_1/screen/screen_terms.dart';
 import 'package:http/http.dart' as http; //for API connection
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
-import 'package:dropdown_search/dropdown_search.dart';
 
 class AssessmentScreen extends StatefulWidget {
   const AssessmentScreen({super.key});
@@ -66,31 +66,30 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   var sex = ["Female", "Male"];
 
   var borderColor = Color.fromARGB(255, 188, 145, 196);
-  radioOptions? _options =
-      radioOptions.dInsipidus; //default selection in radio buttons
 
-  // String phpurl = "http://192.168.1.40/diabeat_app_1/lib/record.php";
+  String phpurl = "http://192.168.1.40/diabeat_app_1/lib/record.php";
 
-  // Future readData() async {
-  //   var res = await http.post(Uri.parse(phpurl), body: {
-  //     "bday": date_controller.text,
-  //     "weight": weight_controller.text,
-  //     "height": height_controller.text,
-  //   });
+  Future readData() async {
+    var res = await http.post(Uri.parse(phpurl), body: {
+      "bday": date_controller.text,
+      "weight": weight_controller.text,
+      "height": height_controller.text,
+      // "type": _RadioButtonGroupWidgetState.newS,
+    });
 
-  //   var data = json.decode(res.body);
-  //   if (data == "Success") {
-  //     Fluttertoast.showToast(
-  //         msg: "Saved",
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.BOTTOM,
-  //         timeInSecForIosWeb: 1,
-  //         backgroundColor: Colors.green,
-  //         textColor: Colors.white,
-  //         fontSize: 16.0);
-  //     _navigateToTerms(context);
-  //   }
-  // }
+    var data = json.decode(res.body);
+    if (data == "Success") {
+      Fluttertoast.showToast(
+          msg: "Saved",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      // _navigateToTerms(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,8 +191,9 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
 
                             if (pickedDate != null) {
                               print(pickedDate);
-                              String formattedDate =
-                                  DateFormat('MM-dd-yyyy').format(pickedDate);
+                              String formattedDate = DateFormat('yyyy-MM-dd')
+                                  .format(pickedDate)
+                                  .toString();
 
                               setState(() {
                                 date_controller.text = formattedDate;
@@ -403,111 +403,9 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
               SizedBox(
                 height: MediaQuery.of(context).devicePixelRatio * 10,
               ),
-              Row(
-                children: [
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: borderColor, width: 2),
-                          borderRadius: (BorderRadius.circular(20))),
-                      child: Column(
-                        children: [
-                          ListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            title: Text('Diabetes Insipidus',
-                                style: TextStyle(
-                                    fontSize: MediaQuery.of(context)
-                                            .devicePixelRatio *
-                                        6)),
-                            leading: Radio<radioOptions>(
-                              value: radioOptions.dInsipidus,
-                              groupValue: _options,
-                              onChanged: (radioOptions? value) {
-                                setState(() {
-                                  _options = value;
-                                });
-                              },
-                            ),
-                          ),
-                          ListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            title: Text(
-                              'Diabetes Mellitus Type 1',
-                              style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).devicePixelRatio *
-                                          6),
-                            ),
-                            leading: Radio<radioOptions>(
-                              value: radioOptions.dMellType1,
-                              groupValue: _options,
-                              onChanged: (radioOptions? value) {
-                                setState(() {
-                                  _options = value;
-                                });
-                              },
-                            ),
-                          ),
-                          ListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            title: Text('Diabetes Mellitus Type 2',
-                                style: TextStyle(
-                                    fontSize: MediaQuery.of(context)
-                                            .devicePixelRatio *
-                                        6)),
-                            leading: Radio<radioOptions>(
-                              value: radioOptions.dMellType2,
-                              groupValue: _options,
-                              onChanged: (radioOptions? value) {
-                                setState(() {
-                                  _options = value;
-                                });
-                              },
-                            ),
-                          ),
-                          ListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            title: Text('Gestational',
-                                style: TextStyle(
-                                    fontSize: MediaQuery.of(context)
-                                            .devicePixelRatio *
-                                        6)),
-                            leading: Radio<radioOptions>(
-                              value: radioOptions.Gestational,
-                              groupValue: _options,
-                              onChanged: (radioOptions? value) {
-                                setState(() {
-                                  _options = value;
-                                });
-                              },
-                            ),
-                          ),
-                          ListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            title: Text('Pre-Diabetes',
-                                style: TextStyle(
-                                    fontSize: MediaQuery.of(context)
-                                            .devicePixelRatio *
-                                        6)),
-                            leading: Radio<radioOptions>(
-                              value: radioOptions.pDiabetes,
-                              groupValue: _options,
-                              onChanged: (radioOptions? value) {
-                                setState(() {
-                                  _options = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+              Column(
+                  // children: [RadioButtonGroupWidget()],
                   ),
-                ],
-              ),
 
               Padding(
                 padding: EdgeInsets.only(
@@ -575,8 +473,13 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                           } else if (height_controller.text.isEmpty) {
                             return null;
                           } else {
-                            _navigateToTerms(context);
-                            // readData();
+                            // _navigateToTerms(context);
+                            readData();
+                            // print(_RadioButtonGroupWidgetState.selectedValue);
+                            // if (_RadioButtonGroupWidgetState.selectedValue ==
+                            //     _RadioButtonGroupWidgetState.values[4]) {
+                            //   _navigatetoPreD(context);
+                            // }
                           }
                         });
                       },
@@ -595,4 +498,78 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => ScreenTerms()));
   }
+
+  void _navigatetoPreD(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => ScreenPreD()));
+  }
 }
+
+// class RadioButtonGroupWidget extends StatefulWidget {
+//   @override
+//   _RadioButtonGroupWidgetState createState() => _RadioButtonGroupWidgetState();
+// }
+
+// class _RadioButtonGroupWidgetState extends State<RadioButtonGroupWidget> {
+//   static var values = <String>[
+//     'Diabetes Insipidus',
+//     'Diabetes Mellitus Type 1',
+//     'Diabetes Mellitus Type 2',
+//     'Gestational',
+//     'Pre-Diabetes'
+//   ];
+//   static var selectedValue = values.first;
+
+//   final selectedColor = Colors.purple;
+//   final unselectedColor = Colors.black;
+
+//   // String phpurl = "http://192.168.1.40/diabeat_app_1/lib/record.php";
+
+//   // Future getValue() async {
+//   //   var res = await http.post(Uri.parse(phpurl), body: {
+//   //     "type": _RadioButtonGroupWidgetState.selectedValue,
+//   //   });
+//   // }
+
+//   @override
+//   Widget build(BuildContext context) => Container(
+//         // color: Colors.white,
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Divider(color: Colors.white),
+//             buildRadios(),
+//             Divider(color: Colors.white),
+//           ],
+//         ),
+//       );
+
+//   Widget buildRadios() => Theme(
+//         data: Theme.of(context).copyWith(
+//           unselectedWidgetColor: unselectedColor,
+//         ),
+//         child: Column(
+//           children: values.map(
+//             (value) {
+//               final selected =
+//                   _RadioButtonGroupWidgetState.selectedValue == value;
+//               final String newStringValue = selectedValue.toString();
+//               final color = selected ? selectedColor : unselectedColor;
+
+//               return RadioListTile<String>(
+//                 value: value,
+//                 groupValue: selectedValue,
+//                 title: Text(
+//                   value,
+//                   style: TextStyle(color: color),
+//                 ),
+//                 activeColor: selectedColor,
+//                 onChanged: (value) => setState(
+//                   () => _RadioButtonGroupWidgetState.selectedValue = value!,
+//                 ),
+//               );
+//             },
+//           ).toList(),
+//         ),
+//       );
+// }
